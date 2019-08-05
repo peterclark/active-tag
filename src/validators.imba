@@ -10,11 +10,13 @@ class BasicValidator
 		
 	def run thing
 		@object = thing
-		@object.errors ||= []
+		@object.errors ||= {}
 		@value = @object[field]()
 		
-	def add message
-		@object.errors.push message if message
+	def add field, message
+		if message
+			@object.errors[field] ||= []
+			@object.errors[field].push message
 		
 	
 export class PresenceValidator < BasicValidator
@@ -23,7 +25,7 @@ export class PresenceValidator < BasicValidator
 		
 	def run object
 		super
-		add
+		add field,
 			if condition
 				"{field} is missing" if !value
 			else
@@ -34,7 +36,7 @@ export class InclusionValidator < BasicValidator
 		
 	def run object
 		super
-		add
+		add field,
 			if condition && condition isa Array
 				if value not in condition
 					"{field} should be one of {condition}"
@@ -51,7 +53,7 @@ export class NumericalityValidator < BasicValidator
 	def run object
 		super
 		const allowed = ['is', 'greater_than', 'less_than', 'in']
-		add
+		add field,
 			if condition && Object.keys(condition)[0] not in allowed
 				"numericality validation requires one of {allowed.join(', ')}"
 			else if condition:is && (value isnt condition:is)
@@ -63,7 +65,7 @@ export class NumericalityValidator < BasicValidator
 			else if condition:in && (value < condition:in[0] || value > condition:in[1])
 				"{field} must be between {condition:in[0]} and {condition:in[1]}"
 				
-		add
+		add field,
 			if condition:integer && "{value}".split('.'):length > 1
 				"{field} must be an integer"
 			
@@ -72,7 +74,7 @@ export class PatternValidator < BasicValidator
 	
 	def run object
 		super
-		add
+		add field,
 			if condition && condition isa RegExp
 				if not condition.test(value)
 					"{field} must match the pattern of {condition}"
@@ -89,7 +91,7 @@ export class LengthValidator < BasicValidator
 		super
 		const allowed = ['min', 'max', 'is', 'in']
 		const len = value:length
-		add
+		add field,
 			if condition && Object.keys(condition)[0] not in allowed
 				"length validation requires one of {allowed.join(', ')}"
 			else if condition:min && (len < condition:min)

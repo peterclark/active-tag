@@ -28,10 +28,10 @@ export tag ActiveTag
 				self:validators.push VALIDATORS[validator](field, condition)
 			
 	def validate
-		errors = []
+		errors = {}
 		for validator in self:constructor:validators
 			validator.run(self)
 			
 	def isValid
 		validate
-		errors:length == 0
+		Object.keys(errors):length == 0
