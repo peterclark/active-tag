@@ -40,7 +40,7 @@ var ActiveTag = Imba.defineTag('ActiveTag', function(tag){
 	};
 	
 	tag.prototype.validate = function (){
-		this.setErrors([]);
+		this.setErrors({});
 		let res = [];
 		for (let i = 0, items = iter$(this.constructor.validators), len = items.length; i < len; i++) {
 			res.push(items[i].run(this));
@@ -50,7 +50,7 @@ var ActiveTag = Imba.defineTag('ActiveTag', function(tag){
 	
 	tag.prototype.isValid = function (){
 		this.validate();
-		return this.errors().length == 0;
+		return Object.keys(this.errors()).length == 0;
 	};
 })
 exports.ActiveTag = ActiveTag;
