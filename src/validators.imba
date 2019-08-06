@@ -9,14 +9,14 @@ class BasicValidator
 		@condition = condition
 		
 	def run thing
-		@object = thing
-		@object.errors ||= {}
-		@value = @object[field]()
+		object = thing
+		object.errors ||= {}
+		value = @object[field]()
 		
 	def add field, message
 		if message
-			@object.errors[field] ||= []
-			@object.errors[field].push message
+			object.errors[field] ||= []
+			object.errors[field].push message
 		
 	
 export class PresenceValidator < BasicValidator
@@ -90,10 +90,12 @@ export class LengthValidator < BasicValidator
 	def run object
 		super
 		const allowed = ['min', 'max', 'is', 'in']
-		const len = value:length
+		const len = value && value:length
 		add field,
 			if condition && Object.keys(condition)[0] not in allowed
 				"length validation requires one of {allowed.join(', ')}"
+			else if !len
+				"{field} must be provided to validate length"
 			else if condition:min && (len < condition:min)
 				"{field} must be at least {condition:min}"
 			else if condition:max && (len > condition:max)

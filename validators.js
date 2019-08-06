@@ -14,17 +14,17 @@ BasicValidator.prototype.value = function(v){ return this._value; }
 BasicValidator.prototype.setValue = function(v){ this._value = v; return this; };
 
 BasicValidator.prototype.run = function (thing){
-	var errors_, v_;
-	this._object = thing;
-	(errors_ = this._object.errors()) || ((this._object.setErrors(v_ = {}),v_));
-	return this._value = this._object[this.field()]();
+	var object_, errors_, v_;
+	this.setObject(thing);
+	(errors_ = (object_ = this.object()).errors()) || ((object_.setErrors(v_ = {}),v_));
+	return (this.setValue(v_ = this._object[this.field()]()),v_);
 };
 
 BasicValidator.prototype.add = function (field,message){
 	var errors_;
 	if (message) {
-		(errors_ = this._object.errors())[field] || (errors_[field] = []);
-		return this._object.errors()[field].push(message);
+		(errors_ = this.object().errors())[field] || (errors_[field] = []);
+		return this.object().errors()[field].push(message);
 	};
 };
 
@@ -103,9 +103,11 @@ exports.LengthValidator = LengthValidator; // export class
 LengthValidator.prototype.run = function (object){
 	LengthValidator.prototype.__super__.run.apply(this,arguments);
 	const allowed = ['min','max','is','in'];
-	const len = this.value().length;
+	const len = this.value() && this.value().length;
 	return this.add(this.field(),(this.condition() && Imba.indexOf(Object.keys(this.condition())[0],allowed) == -1) ? (
 		("length validation requires one of " + allowed.join(', '))
+	) : ((!len) ? (
+		("" + this.field() + " must be provided to validate length")
 	) : ((this.condition().min && (len < this.condition().min)) ? (
 		("" + this.field() + " must be at least " + (this.condition().min))
 	) : ((this.condition().max && (len > this.condition().max)) ? (
@@ -114,5 +116,5 @@ LengthValidator.prototype.run = function (object){
 		("" + this.field() + " must be exactly " + (this.condition().is))
 	) : ((this.condition().in && (len < this.condition().in[0] || len > this.condition().in[1])) && (
 		("" + this.field() + " must be between " + (this.condition().in[0]) + " and " + (this.condition().in[1]))
-	))))));
+	)))))));
 };
