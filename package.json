@@ -1,6 +1,6 @@
 {
   "name": "active-tag",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Enhance your Imba tags with validations",
   "main": "ActiveTag.js",
   "repository": "https://github.com/peterclark/active-tag",
