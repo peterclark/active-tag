@@ -52,5 +52,25 @@ var ActiveTag = Imba.defineTag('ActiveTag', function(tag){
 		this.validate();
 		return Object.keys(this.errors()).length == 0;
 	};
+	
+	tag.prototype.isInvalid = function (){
+		return !(this.isValid());
+	};
+	
+	tag.prototype.save = function (){
+		if (this.isValid()) {
+			return this.onSaveSuccess();
+		} else {
+			return this.onSaveFailure();
+		};
+	};
+	
+	tag.prototype.onSaveSuccess = function (){
+		return console.log('implement an onSaveSuccess method');
+	};
+	
+	tag.prototype.onSaveFailure = function (){
+		return console.log('implement an onSaveFailure method');
+	};
 })
 exports.ActiveTag = ActiveTag;

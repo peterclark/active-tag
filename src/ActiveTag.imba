@@ -35,3 +35,18 @@ export tag ActiveTag
 	def isValid
 		validate
 		Object.keys(errors):length == 0
+
+	def isInvalid
+		!isValid
+
+	def save 
+		if isValid
+			onSaveSuccess
+		else
+			onSaveFailure
+			
+	def onSaveSuccess
+		console.log 'implement an onSaveSuccess method'
+		
+	def onSaveFailure
+		console.log 'implement an onSaveFailure method'
