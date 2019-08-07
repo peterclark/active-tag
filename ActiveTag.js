@@ -57,10 +57,11 @@ var ActiveTag = Imba.defineTag('ActiveTag', function(tag){
 		return !(this.isValid());
 	};
 	
-	tag.prototype.save = function (){
+	tag.prototype.save = function (e){
 		if (this.isValid()) {
 			return this.onSaveSuccess();
 		} else {
+			e.prevent();
 			return this.onSaveFailure();
 		};
 	};

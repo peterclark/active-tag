@@ -39,10 +39,11 @@ export tag ActiveTag
 	def isInvalid
 		!isValid
 
-	def save 
+	def save e
 		if isValid
 			onSaveSuccess
 		else
+			e.prevent
 			onSaveFailure
 			
 	def onSaveSuccess
