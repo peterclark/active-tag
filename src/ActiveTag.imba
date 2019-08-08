@@ -43,7 +43,7 @@ export tag ActiveTag
 		if isValid
 			onSaveSuccess
 		else
-			e.prevent
+			e.prevent if e
 			onSaveFailure
 			
 	def onSaveSuccess

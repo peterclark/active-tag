@@ -61,7 +61,7 @@ var ActiveTag = Imba.defineTag('ActiveTag', function(tag){
 		if (this.isValid()) {
 			return this.onSaveSuccess();
 		} else {
-			e.prevent();
+			if (e) { e.prevent() };
 			return this.onSaveFailure();
 		};
 	};
